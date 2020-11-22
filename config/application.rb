@@ -23,6 +23,8 @@ module MyInterestBackendA
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+    # config.session_store :cookie_store, key: '_session', same_site: :strict
+
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -33,5 +35,9 @@ module MyInterestBackendA
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_session'
+    # config.middleware.use ActionDispatch::Session::CookieStore, key: '_cookie_name'
+
   end
 end

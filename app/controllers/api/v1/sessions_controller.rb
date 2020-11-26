@@ -1,10 +1,11 @@
 class Api::V1::SessionsController < ApplicationController
     def create
+      # byebug
         @user = User.find_by(email: params[:session][:email])
   
         if @user && @user.authenticate(params[:session][:password])
-          session[:user_id] = @user.id
-          render json: UserSerializer.new(@user), status: :ok
+          token = generate_token({id: @user.id})
+          render json: { user: UserSerializer.new(@user), jwt: token }, status: :ok
         else
           render json: {
             error: "Invalid Credentials"
@@ -13,8 +14,9 @@ class Api::V1::SessionsController < ApplicationController
     end
 
     def get_current_user
+      # byebug
         if logged_in?
-          render json: UserSerializer.new(current_user)
+          render json: { user: UserSerializer.new(current_user) }, status: :ok
         else
           render json: {
             error: "No one logged in"
@@ -22,11 +24,11 @@ class Api::V1::SessionsController < ApplicationController
         end
     end
 
-    def destroy
-        session.clear
-        render json: {
-          notice: "Successfully logged out"
-        }, status: :ok
-    end
+    # def destroy
+    #     session.clear
+    #     render json: {
+    #       notice: "Successfully logged out"
+    #     }, status: :ok
+    # end
 
 end

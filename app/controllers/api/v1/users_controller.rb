@@ -5,11 +5,12 @@ class Api::V1::UsersController < ApplicationController
     end
    
     def create
+      # byebug
         @user = User.new(user_params)
     
         if @user.save
-          session[:user_id] = @user.id
-          render json: UserSerializer.new(@user), status: :created
+          token = generate_token({id: @user.id})
+          render json: { user: UserSerializer.new(@user), jwt: token }, status: :created
         else
           resp = {
             error: @user.errors.full_messages.to_sentence

@@ -3,10 +3,12 @@ Rails.application.routes.draw do
   get "/api/v1/get_current_user", to: "api/v1/sessions#get_current_user"
   delete "/api/v1/logout", to: "api/v1/sessions#destroy"
   post "/api/v1/signup", to: "api/v1/users#create"
-  
+
   namespace :api do
     namespace :v1 do
       resources :users, only: [:index, :create]
+      resources :boards
+      resources :pins
     end
   end
 end

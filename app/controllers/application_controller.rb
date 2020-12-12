@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
      def current_user
         begin
-          @current_user ||= User.find(decode_token_and_get_user_id)
+          @current_user ||= User.find_by(id: decode_token_and_get_user_id)
         rescue
           return nil
         end
@@ -16,7 +16,9 @@ class ApplicationController < ActionController::API
       end
     
       def decode_token_and_get_user_id
-        JWT.decode(request.headers["Authorization"], ENV['JWT_TOKEN_SECRET'])[0]["id"]
+        # byebug
+        token = request.headers["Authorization"].gsub("Bearer ", "")
+        JWT.decode(token, ENV['JWT_TOKEN_SECRET'])[0]["id"]
       end
     
 end

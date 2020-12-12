@@ -1,3 +1,4 @@
+
 Rails.application.routes.draw do
   post "/api/v1/login", to: "api/v1/sessions#create"
   get "/api/v1/get_current_user", to: "api/v1/sessions#get_current_user"
@@ -9,6 +10,10 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :create]
       resources :boards
       resources :pins
+      resources :boards do
+        resources :pins
+      end
+      
     end
   end
 end

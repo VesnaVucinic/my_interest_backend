@@ -1,5 +1,5 @@
 class Api::V1::BoardsController < ApplicationController
- 
+  before_action :set_board, only: [:show, :update, :destroy]
   def index
         # byebug
         if logged_in?
@@ -47,10 +47,40 @@ class Api::V1::BoardsController < ApplicationController
         end
       end
 
+      def show
+        render json:  BoardSerializer.new(@board), status: :ok
+      end
+
+      def update
+        if @board.update(board_params)
+          render json:  BoardSerializer.new(@board), status: :ok
+        else
+          error_resp = {
+            error: @board.errors.full_messages.to_sentence
+          }
+          render json: error_resp, status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        if @board.destroy
+          render json:  { data: "Board successfully destroyed" }, status: :ok
+        else
+          error_resp = {
+            error: "Board not found and not destroyed"
+          }
+          render json: error_resp, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_user
         @user = User.find(params[:user_id])
+      end
+
+      def set_board
+        @board = Board.find(params[:id])
       end
 
       def board_params

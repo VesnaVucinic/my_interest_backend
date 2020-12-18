@@ -6,12 +6,24 @@ class Api::V1::BoardsController < ApplicationController
             @boards = current_user.boards
             render json:  BoardSerializer.new(@boards), status: :ok 
         else 
-            @boards = Boards.all
-            render json: BoardSerializer.new(@boards), status: :ok 
-            # render json: {
-            #     error: "You must be logged in to see boards"
-            # }
+            # @boards = Boards.all
+            # render json: BoardSerializer.new(@boards), status: :ok 
+            render json: {
+            error: "You must be logged in to see boards"
+            }
         end
+    end
+
+    def all_boards
+      # byebug
+        if logged_in?
+          @boards = Board.all
+          render json: BoardSerializer.new(@boards), status: :ok 
+        else 
+          render json: {
+          error: "You must be logged in to see boards"
+        }
+      end
     end
 
     # def index

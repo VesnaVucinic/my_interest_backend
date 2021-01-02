@@ -64,6 +64,7 @@ class Api::V1::BoardsController < ApplicationController
       end
 
       def update
+        # byebug
         if @board.update(board_params)
           render json:  BoardSerializer.new(@board), status: :ok
         else
@@ -96,6 +97,6 @@ class Api::V1::BoardsController < ApplicationController
       end
 
       def board_params
-        params.require(:board).permit(:name, :image_url, :user_id, :id)
+        params.require(:board).permit(:name, :image_url, :user_id, :id, :likes)
       end
 end

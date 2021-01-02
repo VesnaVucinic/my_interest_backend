@@ -12,9 +12,9 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :create]
       resources :boards
       resources :pins
-      resources :boards do
-        resources :pins
-      end
+      # resources :boards do
+      #   resources :pins
+      # end
       
     end
   end
